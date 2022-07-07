@@ -1,0 +1,4 @@
+.leaderboarditem {
+  display: flex;
+  flex-direction: row;
+}
