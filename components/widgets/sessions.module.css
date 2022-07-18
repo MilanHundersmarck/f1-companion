@@ -1,0 +1,23 @@
+.container {
+    background-color: #D0D0D0;
+    border-radius: 15px;
+    padding: 0.8rem 1rem 0.8rem 1rem;
+}
+
+.timerblock .title {
+    border-radius: 15px;
+    background-color: #FFFFFF;
+    font-size: 20px;
+    font-weight: 500;
+}
+
+.timernumber {
+    font-weight: 500;
+    font-size: 48px;
+}
+
+
+.timerlabel {
+    font-weight: 500;
+    font-size: 24px;
+}
