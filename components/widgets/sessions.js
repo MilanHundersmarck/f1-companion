@@ -1,52 +1,66 @@
+import React, { useEffect, useState } from 'react';
 import styles from '../widgets/sessions.module.css'
+import { monthToText, addHours, untilDate, toTwoDigits } from '../../lib/functions';
 
-export default function Sessions() {
+export default function Sessions({ data }) {
+
+    //TODO: Sprint race support
+    //TODO: Session in progress
+    //TODO: inline styling
+    //TODO: Countdown aparte component?
+
+    const Race = {date: data.date, time: data.time};
+    const Weekend = [];
+    if(data.FirstPractice) {Weekend.push({title: "Practice 1", date: new Date(`${data.FirstPractice.date}, ${data.FirstPractice.time}`), until: addHours(1,new Date(`${data.FirstPractice.date}, ${data.FirstPractice.time}`))})}
+    if(data.SecondPractice) {Weekend.push({title: "Practice 2", date: new Date(`${data.SecondPractice.date}, ${data.SecondPractice.time}`), until: addHours(1,new Date(`${data.SecondPractice.date}, ${data.SecondPractice.time}`))})}
+    if(data.ThirdPractice) {Weekend.push({title: "Practice 3", date: new Date(`${data.ThirdPractice.date}, ${data.ThirdPractice.time}`), until: addHours(1,new Date(`${data.ThirdPractice.date}, ${data.ThirdPractice.time}`))})}
+    if(data.Qualifying) {Weekend.push({title: "Qualifying", date: new Date(`${data.Qualifying.date}, ${data.Qualifying.time}`), until: addHours(1,new Date(`${data.Qualifying.date}, ${data.Qualifying.time}`))})}
+    if(Race) {Weekend.push({title: "Race", date: new Date(`${Race.date}, ${Race.time}`), until: addHours(2,new Date(`${Race.date}, ${Race.time}`))})}
+
+    //Sort by date
+    Weekend.sort(function(a,b){
+        return a.date - b.date;
+      });
+
+    const nextSession = Weekend.filter(item => new Date(item.date) - new Date() > 0)[0];
+    const untilNextSession = untilDate(nextSession.date);
+
+    const [timeLeft, setTimeLeft] = useState(untilDate(nextSession.date))
+
+    useEffect(() => {
+        setTimeLeft(untilDate(nextSession.date))
+    })
+
     return (
         <div className={styles.container}>
-            <div className={styles.timerblock}>
-                <div className={`${styles.title} text-center`}>Practice 2</div>
+            <div>
+                <div className={`${styles.title} text-center`}>{nextSession.title}</div>
                 <div className='d-flex flex-row justify-content-around'>
                     <div className='d-flex flex-column text-center'>
-                        <div className={styles.timernumber}>00</div>
+                        <div className={styles.timernumber}>{toTwoDigits(untilNextSession.days)}</div>
                         <div className={styles.timerlabel}>DAYS</div>
                     </div>
                     <div className='d-flex flex-column text-center'>
-                        <div className={styles.timernumber}>00</div>
+                        <div className={styles.timernumber}>{toTwoDigits(untilNextSession.hours)}</div>
                         <div className={styles.timerlabel}>HRS</div>
                     </div>
                     <div className='d-flex flex-column text-center'>
-                        <div className={styles.timernumber}>00</div>
+                        <div className={styles.timernumber}>{toTwoDigits(untilNextSession.minutes)}</div>
                         <div className={styles.timerlabel}>MINS</div>
                     </div>
                 </div>
-                
-                <div className='d-flex flex-row justify-content-around'>
-                    {/* Tekst moet kleiner */}
-                    <div className='text-center'><div style={{'fontSize':'40px','fontWeight':'500'}}>09</div><div style={{'fontSize':'20px','fontWeight':'500'}}>JUL</div></div>
-                    <div className='d-flex flex-column my-auto'>
-                        <div style={{'fontSize':'32px','fontWeight':'500'}}>Practice 3</div>
-                        <div style={{'fontSize':'16px','fontWeight':'500'}}>13:30 - 14:30</div>
-                    </div>
-                </div>
-                <div className='d-flex flex-row justify-content-around'>
-                    {/* Tekst moet kleiner */}
-                    <div className='text-center'><div style={{'fontSize':'40px','fontWeight':'500'}}>09</div><div style={{'fontSize':'20px','fontWeight':'500'}}>JUL</div></div>
-                    <div className='d-flex flex-column my-auto'>
-                        <div style={{'fontSize':'32px','fontWeight':'500'}}>Practice 3</div>
-                        <div style={{'fontSize':'16px','fontWeight':'500'}}>13:30 - 14:30</div>
-                    </div>
-                </div>
-                <div className='d-flex flex-row justify-content-around'>
-                    {/* Tekst moet kleiner */}
-                    <div className='text-center'><div style={{'fontSize':'40px','fontWeight':'500'}}>09</div><div style={{'fontSize':'20px','fontWeight':'500'}}>JUL</div></div>
-                    <div className='d-flex flex-column my-auto'>
-                        <div style={{'fontSize':'32px','fontWeight':'500'}}>Practice 3</div>
-                        <div style={{'fontSize':'16px','fontWeight':'500'}}>13:30 - 14:30</div>
-                    </div>
-                </div>
+                <hr/>
             </div>
             <div className={styles.calendarblock}>
-                <div></div>
+                {Weekend.filter(item => new Date(item.date) - new Date() > 0).slice(1).map(item => (
+                    <div className='d-flex flex-row justify-content-around'>
+                        <div className='text-center'><div style={{'fontSize':'40px','fontWeight':'500'}}>{toTwoDigits(item.date.getDate())}</div><div style={{'fontSize':'20px','fontWeight':'500'}}>{monthToText(item.date.getMonth(), 'short').toUpperCase()}</div></div>
+                        <div className='d-flex flex-column my-auto'>
+                            <div style={{'fontSize':'32px','fontWeight':'500'}}>{item.title}</div>
+                            <div style={{'fontSize':'16px','fontWeight':'500'}}>{item.date.getHours()}:{toTwoDigits(item.date.getMinutes())} - {item.until.getHours()}:{toTwoDigits(item.until.getMinutes())}</div>
+                        </div>
+                    </div>
+                ))}
             </div>
         </div>
     )

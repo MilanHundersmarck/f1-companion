@@ -4,20 +4,32 @@ import styles from '../styles/Home.module.css'
 
 //Widgets
 import Sessions from '../components/widgets/sessions'
+// http://ergast.com/api/f1/current/next/races.json
+// export async function getServerSideProps() {
+//     const res = await fetch('https://ergast.com/api/f1/current/last/results.json')
+//     const data = await res.json()
+//     return {
+//         props: {
+//             data
+//         }
+//       }
+// }
 
 export async function getServerSideProps() {
-    const res = await fetch('https://ergast.com/api/f1/current/last/results.json')
-    const data = await res.json()
-    return {
-        props: {
-            data
-        }
-      }
+  const [lastResultRes, nextRaceRes] = await Promise.all([
+    fetch('https://ergast.com/api/f1/current/last/results.json'), 
+    fetch('http://ergast.com/api/f1/current/next/races.json')
+  ]);
+  const [lastResult, nextRace] = await Promise.all([
+    lastResultRes.json(), 
+    nextRaceRes.json()
+  ]);
+  return { props: { lastResult, nextRace } };
 }
 
-export default function Home({ data }) {
-  const APIdata = data['MRData']['RaceTable']['Races'][0];
-  const results = APIdata['Results'];
+export default function Home({ lastResult, nextRace }) {
+  const nextRaceData = nextRace['MRData']['RaceTable']['Races'][0]
+  
   return (
     <Layout>
       <Head>
@@ -25,7 +37,7 @@ export default function Home({ data }) {
       </Head>
       <div className='container'>
         <div className='row'>
-          <div className='col-12 col-md-3'><Sessions/></div>
+          <div className='col-12 col-md-6 col-lg-4 col-xl-3'><Sessions data={nextRaceData}/></div>
         </div>  
       </div>
       {/* <div>
