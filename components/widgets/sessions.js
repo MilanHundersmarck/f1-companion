@@ -27,9 +27,9 @@ export default function Sessions({ data }) {
 
     const [timeLeft, setTimeLeft] = useState(untilDate(nextSession.date))
 
-    useEffect(() => {
-        setTimeLeft(untilDate(nextSession.date))
-    })
+    // useEffect(() => {
+    //     setTimeLeft(untilDate(nextSession.date))
+    // })
 
     return (
         <div className={styles.container}>
@@ -52,8 +52,8 @@ export default function Sessions({ data }) {
                 <hr/>
             </div>
             <div className={styles.calendarblock}>
-                {Weekend.filter(item => new Date(item.date) - new Date() > 0).slice(1).map(item => (
-                    <div className='d-flex flex-row justify-content-around'>
+                {Weekend.filter(item => new Date(item.date) - new Date() > 0).slice(1).map((item, index) => (
+                    <div className='d-flex flex-row justify-content-around' key={index}>
                         <div className='text-center'><div style={{'fontSize':'40px','fontWeight':'500'}}>{toTwoDigits(item.date.getDate())}</div><div style={{'fontSize':'20px','fontWeight':'500'}}>{monthToText(item.date.getMonth(), 'short').toUpperCase()}</div></div>
                         <div className='d-flex flex-column my-auto'>
                             <div style={{'fontSize':'32px','fontWeight':'500'}}>{item.title}</div>
