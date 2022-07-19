@@ -27,9 +27,9 @@ export default function Sessions({ data }) {
 
     const [timeLeft, setTimeLeft] = useState(untilDate(nextSession.date))
 
-    // useEffect(() => {
-    //     setTimeLeft(untilDate(nextSession.date))
-    // })
+    useEffect(() => {
+        setTimeLeft(untilDate(nextSession.date))
+    })
 
     return (
         <div className={styles.container}>
