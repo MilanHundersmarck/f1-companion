@@ -4,7 +4,6 @@ import { monthToText, addHours, untilDate, toTwoDigits } from '../../lib/functio
 
 export default function Sessions({ data }) {
 
-    //TODO: Sprint race support
     //TODO: Session in progress
     //TODO: inline styling
     //TODO: Countdown aparte component?
@@ -15,6 +14,7 @@ export default function Sessions({ data }) {
     if(data.SecondPractice) {Weekend.push({title: "Practice 2", date: new Date(`${data.SecondPractice.date}, ${data.SecondPractice.time}`), until: addHours(1,new Date(`${data.SecondPractice.date}, ${data.SecondPractice.time}`))})}
     if(data.ThirdPractice) {Weekend.push({title: "Practice 3", date: new Date(`${data.ThirdPractice.date}, ${data.ThirdPractice.time}`), until: addHours(1,new Date(`${data.ThirdPractice.date}, ${data.ThirdPractice.time}`))})}
     if(data.Qualifying) {Weekend.push({title: "Qualifying", date: new Date(`${data.Qualifying.date}, ${data.Qualifying.time}`), until: addHours(1,new Date(`${data.Qualifying.date}, ${data.Qualifying.time}`))})}
+    if(data.Sprint) {Weekend.push({title: "Sprint", date: new Date(`${data.Sprint.date}, ${data.Sprint.time}`), until: addHours(0.5,new Date(`${data.Sprint.date}, ${data.Sprint.time}`))})}
     if(Race) {Weekend.push({title: "Race", date: new Date(`${Race.date}, ${Race.time}`), until: addHours(2,new Date(`${Race.date}, ${Race.time}`))})}
 
     //Sort by date
