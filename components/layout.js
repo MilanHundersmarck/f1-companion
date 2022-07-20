@@ -19,10 +19,14 @@ export default function Layout({ children }) {
                 <meta name="twitter:card" content="summary_large_image" />
                 
             </Head>
-            <header className={styles.header}>
-                <h2>F1 Companion</h2>
+            <header >
+                <nav className="navbar navbar-light mb-4" style={{"backgroundColor":"#E10600"}}>
+                    <a className="navbar-brand text-white px-5" href="#">
+                        {siteTitle}
+                    </a>
+                </nav>
             </header>
             <main>{children}</main>
         </div>
-            )
+        )
 }

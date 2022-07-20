@@ -4,9 +4,9 @@ import { monthToText, addHours, untilDate, toTwoDigits } from '../../lib/functio
 
 export default function Sessions({ data }) {
 
-    //TODO: Session in progress
     //TODO: inline styling
     //TODO: Countdown aparte component?
+    //TODO: Spam ding?
 
     const Race = {date: data.date, time: data.time};
     const Weekend = [];
@@ -24,6 +24,15 @@ export default function Sessions({ data }) {
 
     const nextSession = Weekend.filter(item => new Date(item.date) - new Date() > 0)[0];
     const untilNextSession = untilDate(nextSession.date);
+    let inProgress = false;
+    
+    Weekend.forEach((item) => {
+        if(new Date(item.date) < new Date() && new Date(item.until) > new Date()) {
+            inProgress = true;
+        } else {
+            inProgress = false;
+        }
+    })
 
     const [timeLeft, setTimeLeft] = useState(untilDate(nextSession.date))
 
@@ -32,10 +41,12 @@ export default function Sessions({ data }) {
     })
 
     return (
-        <div className={styles.container}>
+        <div className={styles.container}>  
             <div>
                 <div className={`${styles.title} text-center`}>{nextSession.title}</div>
-                <div className='d-flex flex-row justify-content-around'>
+
+                {/* <div className={`${styles.timerlabel} text-center mt-3`}>IN PROGRESS</div> */}
+                {!inProgress ? <div className='d-flex flex-row justify-content-around'>
                     <div className='d-flex flex-column text-center'>
                         <div className={styles.timernumber}>{toTwoDigits(untilNextSession.days)}</div>
                         <div className={styles.timerlabel}>DAYS</div>
@@ -48,7 +59,7 @@ export default function Sessions({ data }) {
                         <div className={styles.timernumber}>{toTwoDigits(untilNextSession.minutes)}</div>
                         <div className={styles.timerlabel}>MINS</div>
                     </div>
-                </div>
+                </div> : <div className={`${styles.timerlabel} text-center mt-3`}>IN PROGRESS</div>}
                 <hr/>
             </div>
             <div className={styles.calendarblock}>
