@@ -3,7 +3,7 @@ import Layout, { siteTile } from '../components/layout'
 import styles from '../styles/Home.module.css'
 
 //Widgets
-import Sessions from '../components/widgets/sessions'
+import Sessions from '../components/widgets/sessions/sessions.js'
 
 export async function getServerSideProps() {
   const [lastResultRes, nextRaceRes] = await Promise.all([

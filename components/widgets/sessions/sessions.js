@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
-import styles from '../widgets/sessions.module.css'
-import { monthToText, addHours, untilDate, toTwoDigits } from '../../lib/functions';
+import styles from './sessions.module.css'
+import { monthToText, addHours, untilDate, toTwoDigits } from '../../../lib/functions';
 
 export default function Sessions({ data }) {
 
@@ -27,6 +27,7 @@ export default function Sessions({ data }) {
     let inProgress = false;
     
     Weekend.forEach((item) => {
+        // if(new Date(item.date) < new Date() && new Date(item.until) > new Date()) {
         if(new Date(item.date) < new Date() && new Date(item.until) > new Date()) {
             inProgress = true;
         } else {
@@ -37,8 +38,11 @@ export default function Sessions({ data }) {
     const [timeLeft, setTimeLeft] = useState(untilDate(nextSession.date))
 
     useEffect(() => {
-        setTimeLeft(untilDate(nextSession.date))
-    })
+        const interval = setInterval(() => setTimeLeft(untilDate(nextSession.date)), 1000);
+        return () => {
+            clearInterval(interval);
+        };
+    },[])
 
     return (
         <div className={styles.container}>  
