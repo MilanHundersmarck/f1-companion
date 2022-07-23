@@ -4,9 +4,10 @@ import { monthToText, addHours, untilDate, toTwoDigits } from '../../../lib/func
 
 export default function Sessions({ data }) {
 
-    //TODO: inline styling
+
+    //TODO: In Progress
+    //TODO: inline styling weghalen
     //TODO: Countdown aparte component?
-    //TODO: Spam ding?
 
     const Race = {date: data.date, time: data.time};
     const Weekend = [];
@@ -16,6 +17,8 @@ export default function Sessions({ data }) {
     if(data.Qualifying) {Weekend.push({title: "Qualifying", date: new Date(`${data.Qualifying.date}, ${data.Qualifying.time}`), until: addHours(1,new Date(`${data.Qualifying.date}, ${data.Qualifying.time}`))})}
     if(data.Sprint) {Weekend.push({title: "Sprint", date: new Date(`${data.Sprint.date}, ${data.Sprint.time}`), until: addHours(0.5,new Date(`${data.Sprint.date}, ${data.Sprint.time}`))})}
     if(Race) {Weekend.push({title: "Race", date: new Date(`${Race.date}, ${Race.time}`), until: addHours(2,new Date(`${Race.date}, ${Race.time}`))})}
+    
+    Weekend.push({title: 'Practice 2.5', date: new Date('22 july 2022, 23:27:00'), until: new Date('22 july 2022, 23:28:00')})
 
     //Sort by date
     Weekend.sort(function(a,b){
@@ -32,6 +35,7 @@ export default function Sessions({ data }) {
             inProgress = true;
         } else {
             inProgress = false;
+            
         }
     })
 
