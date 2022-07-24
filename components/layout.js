@@ -1,4 +1,5 @@
 import Head from 'next/head'
+import Link from 'next/link'
 import styles from './layout.module.css'
 
 export const siteTitle = 'F1 Companion'
@@ -24,6 +25,12 @@ export default function Layout({ children }) {
                     <a className="navbar-brand text-white px-5" href="#">
                         {siteTitle}
                     </a>
+                    <ul className="navbar-nav mr-auto">
+                        <li className="nav-item">
+                            <Link className="nav-link" href='/circuits'>Circuits</Link>
+                        </li>
+                    </ul>
+                    
                 </nav>
             </header>
             <main>{children}</main>

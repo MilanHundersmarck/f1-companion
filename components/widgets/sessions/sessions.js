@@ -26,7 +26,9 @@ export default function Sessions({ data }) {
       });
 
     const nextSession = Weekend.filter(item => new Date(item.date) - new Date() > 0)[0];
-    const untilNextSession = untilDate(nextSession.date);
+    let untilNextSession;
+    if(nextSession) {untilNextSession = untilDate(nextSession.date)}
+    
     let inProgress = false;
     
     Weekend.forEach((item) => {
@@ -39,18 +41,20 @@ export default function Sessions({ data }) {
         }
     })
 
-    const [timeLeft, setTimeLeft] = useState(untilDate(nextSession.date))
+    const [timeLeft, setTimeLeft] = useState(nextSession ? untilDate(nextSession.date) : 0)
 
     useEffect(() => {
-        const interval = setInterval(() => setTimeLeft(untilDate(nextSession.date)), 1000);
-        return () => {
-            clearInterval(interval);
-        };
+        if(nextSession) {
+            const interval = setInterval(() => setTimeLeft(untilDate(nextSession.date)), 1000);
+            return () => {
+                clearInterval(interval);
+            };
+        }
     },[])
 
     return (
         <div className={styles.container}>  
-            <div>
+            {nextSession ?             <div>
                 <div className={`${styles.title} text-center`}>{nextSession.title}</div>
 
                 {/* <div className={`${styles.timerlabel} text-center mt-3`}>IN PROGRESS</div> */}
@@ -69,7 +73,7 @@ export default function Sessions({ data }) {
                     </div>
                 </div> : <div className={`${styles.timerlabel} text-center mt-3`}>IN PROGRESS</div>}
                 <hr/>
-            </div>
+            </div> : <div>No race found</div>}
             <div className={styles.calendarblock}>
                 {Weekend.filter(item => new Date(item.date) - new Date() > 0).slice(1).map((item, index) => (
                     <div className='d-flex flex-row justify-content-around' key={index}>
